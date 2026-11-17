@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Langit Hari Ini!♥</title>
+  <meta name="theme-color" content="#f7c6d9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-mood="none">
+  <!-- Animated weather background (rain, clouds, stars...). Driven by body[data-mood]. -->
+  <div class="weather-fx" aria-hidden="true"></div>
+  <div class="weather-flash" aria-hidden="true"></div>
+
+  <main class="app">
+    <h1 class="app-title">Langit Hari Ini!♥</h1>
+
+    <!-- ================= STEP 1: choose a location ================= -->
+    <section id="view-pick" class="card welcome" aria-labelledby="pick-title">
+      <h2 id="pick-title">Choose a location to see the weather</h2>
+      <p class="small">Search any town, district, state or holiday spot in Malaysia, or let us find you.</p>
+
+      <div class="picker">
+        <label for="search">Search for a place</label>
+        <div class="combo">
+          <input id="search" type="text" placeholder="e.g. Kota Kinabalu, Ipoh, Langkawi…" autocomplete="off"
+                 role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions">
+          <ul id="suggestions" class="suggestions" role="listbox" aria-label="Matching places" hidden></ul>
+        </div>
+        <button id="check" class="btn" type="button">Check weather</button>
+        <button id="locate" class="btn btn-soft" type="button">Use my location</button>
+      </div>
+      <p id="pick-status" class="status" role="status"></p>
+    </section>
+
+    <!-- Pop-up message (e.g. "Please pick a location first") -->
+    <dialog id="popup" class="popup" aria-labelledby="popup-title">
+      <p id="popup-title" class="popup-title">Oops!</p>
+      <p id="popup-text">Please pick a location first.</p>
+      <form method="dialog"><button class="btn" type="submit">OK</button></form>
+    </dialog>
+
+    <!-- ================= STEP 2: the chosen place ================= -->
+    <section id="view-place" class="place-view" hidden>
+
+      <div class="card place-bar">
+        <div>
+          <p class="small">Showing</p>
+          <p class="place"><strong id="place-name">--</strong> <span id="place-meta" class="small"></span></p>
+        </div>
+        <button id="change" class="btn btn-soft" type="button">Change location</button>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="What do you want to see?">
+        <button id="tab-weather" class="tab" role="tab" type="button" aria-selected="true" aria-controls="panel-weather">Weather</button>
+        <button id="tab-aqi" class="tab" role="tab" type="button" aria-selected="false" aria-controls="panel-aqi" tabindex="-1">Air quality</button>
+      </div>
+
+      <p id="status" class="status" role="status"></p>
+
+      <!-- ----- Weather tab ----- -->
+      <div id="panel-weather" class="panel" role="tabpanel" aria-labelledby="tab-weather">
+
+        <!-- data-mood is one of: sunny, cloudy, rain, storm, haze, hot, night, loading -->
+        <!-- Put your art in public/mascot/<mood>.png and it shows up automatically. -->
+        <section class="card mascot-card" aria-labelledby="mascot-line">
+          <div id="mascot" class="mascot" data-mood="loading">
+            <img id="mascot-img" alt="" hidden>
+            <span id="mascot-placeholder" class="mascot-placeholder">mascot</span>
+          </div>
+          <p id="mascot-line" class="mascot-line">Checking the sky…</p>
+        </section>
+
+        <section class="card now">
+          <h2>Right now</h2>
+          <div class="now-main">
+            <span id="now-temp" class="big">--°</span>
+            <span id="now-cond">--</span>
+          </div>
+          <dl class="stats">
+            <div><dt>Feels like</dt><dd id="now-feels">--</dd></div>
+            <div><dt>Humidity</dt><dd id="now-humidity">--</dd></div>
+            <div><dt>Wind</dt><dd id="now-wind">--</dd></div>
+            <div><dt>UV index</dt><dd id="now-uv">--</dd></div>
+          </dl>
+          <p id="rain-soon" class="rain-soon"></p>
+        </section>
+
+        <section class="card today">
+          <h2>Today <span class="small">(MET Malaysia)</span></h2>
+          <p id="today-summary"></p>
+          <div class="periods">
+            <div class="period" id="p-morning"><h3>Morning</h3><p>--</p></div>
+            <div class="period" id="p-afternoon"><h3>Afternoon</h3><p>--</p></div>
+            <div class="period" id="p-night"><h3>Night</h3><p>--</p></div>
+          </div>
+          <h3>Rest of today</h3>
+          <ol id="hourly-list" class="hourly-list"></ol>
+        </section>
+      </div>
+
+      <!-- ----- Air quality tab ----- -->
+      <div id="panel-aqi" class="panel" role="tabpanel" aria-labelledby="tab-aqi" hidden>
+        <section class="card aqi">
+          <h2>Air quality <span class="small">(DOE Air Pollutant Index)</span></h2>
+          <div id="aqi-main" class="aqi-main" data-band="na">
+            <span id="aqi-value" class="big">--</span>
+            <div>
+              <p id="aqi-band">--</p>
+              <p id="aqi-station" class="small"></p>
+            </div>
+          </div>
+          <p id="aqi-advice"></p>
+          <h3>Today so far</h3>
+          <div id="aqi-history" class="aqi-history" aria-label="Air Pollutant Index readings so far today"></div>
+
+          <details class="all-stations">
+            <summary>All stations in Malaysia</summary>
+            <p id="aqi-summary" class="small"></p>
+            <div id="aqi-all"></div>
+          </details>
+        </section>
+      </div>
+    </section>
+
+    <footer class="small footer">
+      Today's forecast: MET Malaysia via data.gov.my (CC BY 4.0).
+      Air quality: Department of Environment Malaysia (APIMS).
+      Current &amp; hourly weather: Open-Meteo.com (CC BY 4.0).
+      <span id="updated-wrap" hidden><br>Last updated: <span id="updated">--</span></span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
