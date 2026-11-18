@@ -564,7 +564,14 @@ details > summary:focus-visible { outline: var(--px) dashed var(--accent-dark); 
 
 /* ---------- footer ---------- */
 .footer { text-align: center; padding: 8px 0 24px; color: var(--ink); }
-
+.footer .credit {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 800;
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+.footer .credit:hover { text-decoration: underline; text-underline-offset: 3px; }
 /* ---------- small screens ---------- */
 @media (max-width: 540px) {
   body { font-size: 19px; }
@@ -586,7 +593,7 @@ body[data-mood="haze"]   { --sky: #eadfcf; --sky-2: #f3e6dc; }
 body[data-mood="hot"]    { --sky: #ffd9c2; --sky-2: #ffe9d6; }
 body[data-mood="night"]  { --sky: #3d3566; --sky-2: #574a8c; }
 body[data-mood="night"] .footer { color: #f3ecff; }
-
+body[data-mood="night"] .footer .credit { color: #ffc2dd; }
 /* ==========================================================================
    DECORATION HOOKS
    body[data-mood="sunny|cloudy|rain|storm|haze|hot|night|loading"]  page sky per mood
